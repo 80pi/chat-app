@@ -8,13 +8,33 @@
   </head>
   <body>
     <h3>In chat app</h3>
+    <div id="dyn-msg"></div>
     <!-- <p><button id="increment">+1</button></p>
     &nbsp;
     <p><button id="decrement">-1</button></p> -->
     <form id="form-data">
-      <input name="message" id="text" type="text" />
+      <input name="message" placeholder="Enter text" id="text" type="text" />
       <button id="submit" type="submit">submit</button>
     </form>
+    <button id="location">send location</button>
+
+    <script id="msg-tmp" type="text/html">
+      <div>
+        <p>{{createdAt}}-{{msg}}</p>
+      </div>
+    </script>
+    <script id="link-tmp" type="text/html">
+      <div>
+        <h4>
+          {{createdAtLocation}}-
+          <a href="{{linkTemp}}" target="_blank">my location be</a>
+        </h4>
+      </div>
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/chat.js"></script>
   </body>

@@ -2,6 +2,8 @@ const path = require('path');
 const http = require('http');
 const socketio = require('socket.io');
 const express = require('express');
+const Filter = require('bad-words');
+const {generateMsg, generateUrl}=require('./utils/message')
 
 
 
@@ -16,13 +18,22 @@ app.use(express.static(path.join(__dirname,'../public')))
 
 io.on('connection',(socket)=>{
     console.log('new conn')
-    socket.emit('msg','welcome')
-    socket.broadcast.emit('msg','A new user added')
-    socket.on('data',(msg)=>{
-        io.emit('display',msg)
+    socket.emit('display',generateMsg('welcome'))
+    socket.broadcast.emit('msg',generateMsg('A new user added'))
+    socket.on('data',(msg,cb)=>{
+        const filter=new Filter()
+        if(filter.isProfane(msg)){
+            return cb('profantiy is not allowed')
+        }
+        io.emit('display',generateMsg(msg))
+        cb()
+    })
+    socket.on('location',(loc,cb)=>{
+        io.emit('locationDis',generateUrl(`https://google.com/maps?q=${loc.latitude},${loc.longitude}`))
+        cb()
     })
     socket.on('disconnect',()=>{
-        io.emit('msg','A user got disconnected')
+        io.emit('msg',generateMsg('A user got disconnected'))
     })
     // socket.emit('countUpdate',count)
 
